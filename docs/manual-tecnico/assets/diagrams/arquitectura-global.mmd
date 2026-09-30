@@ -1,0 +1,26 @@
+graph TB
+  subgraph Clientes
+    Web[Panel Web React]
+    Movil[App Flutter Android/iOS]
+    PWA[PWA Navegador]
+  end
+  subgraph Backend[Backend Spring Boot :8083]
+    API[API REST /api]
+    Sec[Capa Seguridad JWT]
+    Svc[Servicios]
+    Repo[Repositorios JPA]
+  end
+  DB[(MySQL gea)]
+  SMTP[SMTP Institucional]
+  FCM[Firebase Cloud Messaging]
+  Azure[Microsoft Azure AD]
+  Web --> API
+  Movil --> API
+  PWA --> API
+  API --> Sec
+  Sec --> Svc
+  Svc --> Repo
+  Repo --> DB
+  Svc --> SMTP
+  Svc --> FCM
+  Sec --> Azure

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; color: #1f2937; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .header { background-color: #dc2626; color: white; padding: 24px; text-align: center; }
+        .header h2 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
+        .content { padding: 32px; }
+        .content p { font-size: 16px; line-height: 1.6; color: #4b5563; margin-top: 0; }
+        .details-box { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 20px; margin: 24px 0; }
+        .details-box ul { list-style: none; padding: 0; margin: 0; }
+        .details-box li { margin-bottom: 12px; font-size: 15px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px; }
+        .details-box li:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .details-box strong { color: #111827; display: inline-block; width: 140px; }
+        .btn-container { text-align: center; margin-top: 32px; }
+        .btn { display: inline-block; background-color: #dc2626; color: #ffffff !important; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 16px; transition: background-color 0.2s; }
+        .footer { background-color: #f9fafb; padding: 16px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 style="color: #ffffff !important;">Nuevo Evento Institucional</h2>
+        </div>
+        <div class="content">
+            <p>Hola,</p>
+            <p>Se ha publicado un nuevo evento institucional en <strong>GEA</strong>. Revisa los detalles a continuación:</p>
+            
+            <div class="details-box">
+                <ul>
+                    <li><strong>Título:</strong> ${titulo}</li>
+                    <li><strong>Descripción:</strong> ${descripcion}</li>
+                    <li><strong>Fecha:</strong> ${fechaEvento}</li>
+                    <li><strong>Horario:</strong> ${horario}</li>
+                    <li><strong>Lugar:</strong> ${lugar}</li>
+                    <li><strong>Tipo de Evento:</strong> ${tipoEvento}</li>
+                    <li><strong>Organiza:</strong> ${oficina}</li>
+                    <li><strong>Responsable:</strong> ${responsable}</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin: 24px 0;">
+                <img src="cid:piezaGrafica" alt="Pieza Gráfica del Evento" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                <p style="font-size: 12px; color: #9ca3af; margin-top: 8px;">(Si no visualizas la imagen, se encuentra adjunta a este correo)</p>
+            </div>
+            
+            <div class="btn-container">
+                <a href="${detalleUrl}" class="btn" style="color: #ffffff !important;">Ver detalles completos</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>© 2026 GEA - Gestión de Eventos y Actividades</p>
+            <p>Este es un correo generado automáticamente. Por favor no responder.</p>
+        </div>
+    </div>
+</body>
+</html>

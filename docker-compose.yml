@@ -1,0 +1,100 @@
+x-logging: &default-logging
+  # Rotación de logs de Docker: sin esto, el driver json-file por defecto no
+  # tiene límite y puede llenar el disco de la VM con el tiempo (Tarea 3.6).
+  driver: json-file
+  options:
+    max-size: "50m"
+    max-file: "5"
+
+services:
+  db:
+    build:
+      context: ./deploy/mysql
+    container_name: gea
+    # Sin env_file aquí a propósito: solo necesita DB_ROOT_PASSWORD/DB_NAME
+    # (interpolados abajo desde .env). No hay razón para exponerle al
+    # contenedor de MySQL el resto de secretos (JWT_SECRET, SMTP_PASS, etc.)
+    # que sí necesita "backend".
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Define DB_ROOT_PASSWORD en tu archivo .env (ver .env.example)}
+      MYSQL_DATABASE: ${DB_NAME:-gea}
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASSWORD:?Define DB_ROOT_PASSWORD en tu archivo .env (ver .env.example)}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gea_backend
+    env_file: .env
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${DB_NAME:-gea}?useSSL=false&serverTimezone=America/Bogota&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      - DB_USERNAME=${DB_USERNAME:-root}
+      - DB_PASSWORD=${DB_ROOT_PASSWORD:?Define DB_ROOT_PASSWORD en tu archivo .env (ver .env.example)}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:5174,http://localhost:3000,http://localhost}
+      - JWT_SECRET=${JWT_SECRET:?Define JWT_SECRET en tu archivo .env (ver .env.example)}
+      # Nginx (servicio frontend) es la puerta de entrada confiable en esta
+      # topología (Tarea 3.1) — sin esto, el rate-limiter vería la IP interna
+      # de Nginx para TODOS los clientes reales, agrupándolos a todos bajo
+      # una sola cuota compartida en vez de la IP real de cada uno.
+      - RATE_LIMIT_TRUST_PROXY=${RATE_LIMIT_TRUST_PROXY:-true}
+      - SMTP_USER=${SMTP_USER:-gea.notificaciones@unilibrecucuta.edu.co}
+      - SMTP_PASS=${SMTP_PASS:-CAMBIAR_ESTA_CLAVE_DE_APLICACION}
+      - UNIVERSITY_RECIPIENTS=${UNIVERSITY_RECIPIENTS:-}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+      - COOKIE_SECURE=${COOKIE_SECURE:-false}
+      # Sobrescribe el JAVA_OPTS por defecto del Dockerfile sin reconstruir la
+      # imagen — ajustar en .env según la RAM real de la VM (ver tabla del
+      # plan de migración).
+      - JAVA_OPTS=${JAVA_OPTS:--Xms1g -Xmx2560m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+ExitOnOutOfMemoryError}
+    ports:
+      - "8083:8080"
+    # Coherente con JAVA_OPTS (-Xmx) de arriba: deja margen sobre el heap para
+    # metaspace/hilos/off-heap sin permitir que el contenedor invada la RAM
+    # reservada a MySQL. Ajustar junto con JAVA_OPTS si la VM tiene más RAM.
+    mem_limit: ${BACKEND_MEM_LIMIT:-3g}
+    depends_on:
+      db:
+        # Antes solo esperaba a que el contenedor de MySQL arrancara, no a
+        # que aceptara conexiones — Spring/Flyway lo toleraban reintentando
+        # (con errores transitorios en el log al arrancar), pero esperar a
+        # que MySQL esté realmente listo evita ese ruido y acelera el arranque.
+        condition: service_healthy
+    restart: unless-stopped
+    logging: *default-logging
+
+  frontend:
+    build:
+      # Ruta al repo GEA_FRONT, configurable en .env (ver FRONTEND_REPO_PATH
+      # en .env.example) — por defecto asume carpetas hermanas.
+      context: ${FRONTEND_REPO_PATH:-../GEA_FRONT}
+      dockerfile: Dockerfile
+    container_name: gea_frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Certificados TLS reales del dominio de producción (Let's Encrypt o CA
+      # interna de la universidad, ver Tarea 3.2). En desarrollo local, generar
+      # un par autofirmado con el mismo nombre de archivo en ./deploy/certs/
+      # (carpeta fuera de git — nunca commitear certificados/llaves privadas).
+      - ./deploy/certs/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro
+      - ./deploy/certs/privkey.pem:/etc/nginx/certs/privkey.pem:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+    logging: *default-logging
+
+volumes:
+  db_data:

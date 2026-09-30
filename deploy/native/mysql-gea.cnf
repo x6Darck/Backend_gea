@@ -1,0 +1,31 @@
+# Tuning de MySQL para despliegue NATIVO (sin Docker) en Ubuntu/Debian.
+# Mismos valores que deploy/mysql/my.cnf (versión Docker) — solo cambia dónde
+# se instala el archivo.
+#
+# Instalación:
+#   sudo cp deploy/native/mysql-gea.cnf /etc/mysql/mysql.conf.d/gea.cnf
+#   sudo systemctl restart mysql
+#
+# Línea base para VM compartida con el backend (8GB total: SO ~1GB, Nginx
+# ~0.25GB, resto repartido mitad MySQL/mitad JVM -> ~2.5GB para MySQL, ~2.5GB
+# de heap para la JVM). Ajustar innodb_buffer_pool_size según la tabla de
+# tuning por RAM del plan de migración si el servidor tiene más RAM
+# (16GB -> 6G, 32GB -> 12G) — coordinado con JAVA_OPTS en backend.env.
+
+[mysqld]
+innodb_buffer_pool_size = 2560M
+innodb_log_file_size    = 512M
+# Durabilidad completa (fsync en cada commit). Bajar a 2 solo si se acepta
+# perder hasta ~1s de transacciones ante un crash del sistema operativo, a
+# cambio de mejor throughput de escritura.
+innodb_flush_log_at_trx_commit = 1
+# Coherente con el pool Hikari de la app (25 por defecto en
+# application.properties); deja margen para mysql shell, backups, monitoring.
+max_connections = 100
+innodb_flush_method = O_DIRECT
+
+# Slow query log: insumo para confirmar en producción qué queries realmente
+# son lentas y decidir si faltan índices adicionales a los de la migración V8.
+slow_query_log     = 1
+slow_query_log_file = /var/log/mysql/slow.log
+long_query_time     = 0.5

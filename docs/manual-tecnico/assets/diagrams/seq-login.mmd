@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant Cli as Cliente
+  participant AC as AuthController
+  participant AS as AuthServiceImpl
+  participant UR as UsuarioRepository
+  participant JS as JwtService
+  Cli->>AC: POST /auth/login {correo, password}
+  AC->>AS: login(request)
+  AS->>UR: getByCorreoOptimized(correo)
+  UR-->>AS: Usuario
+  AS->>AS: passwordEncoder.matches()
+  AS->>JS: generarToken(usuario)
+  JS-->>AS: JWT
+  AS-->>AC: AuthResponse
+  AC-->>Cli: 200 OK {token, datos}

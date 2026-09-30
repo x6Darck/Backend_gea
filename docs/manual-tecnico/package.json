@@ -1,0 +1,18 @@
+{
+  "name": "gea-manual-tecnico",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Generador del manual tecnico GEA en PDF",
+  "scripts": {
+    "diagrams": "node build.js --diagrams-only",
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "marked": "^12.0.0",
+    "marked-highlight": "^2.1.0",
+    "highlight.js": "^11.9.0"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.9.0"
+  }
+}

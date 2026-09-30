@@ -1,0 +1,9 @@
+graph LR
+  REQ[DTO Request] --> C[Controller]
+  C --> S[Service]
+  S --> R[Repository]
+  R --> E[Entity JPA]
+  E --> DB[(MySQL)]
+  S --> M[Mapper]
+  M --> DTO[DTO Response]
+  C --> DTO

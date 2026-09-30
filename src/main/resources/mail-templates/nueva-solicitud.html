@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; color: #1f2937; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .header { background-color: #2563eb; color: white; padding: 24px; text-align: center; }
+        .header h2 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
+        .content { padding: 32px; }
+        .content p { font-size: 16px; line-height: 1.6; color: #4b5563; margin-top: 0; }
+        .details-box { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 20px; margin: 24px 0; }
+        .details-box ul { list-style: none; padding: 0; margin: 0; }
+        .details-box li { margin-bottom: 12px; font-size: 15px; border-bottom: 1px solid #f3f4f6; padding-bottom: 8px; }
+        .details-box li:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .details-box strong { color: #111827; display: inline-block; width: 140px; }
+        .btn-container { text-align: center; margin-top: 32px; }
+        .btn { display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 16px; transition: background-color 0.2s; }
+        .footer { background-color: #f9fafb; padding: 16px; text-align: center; font-size: 13px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 style="color: #ffffff !important;">Nueva Solicitud Pendiente</h2>
+        </div>
+        <div class="content">
+            <p>Hola Equipo de Comunicaciones,</p>
+            <p>Se ha registrado una nueva solicitud que requiere revisión. A continuación los detalles básicos:</p>
+            
+            <div class="details-box">
+                <ul>
+                    <li><strong>Tipo:</strong> ${tipo}</li>
+                    <li><strong>Título:</strong> ${titulo}</li>
+                    <li><strong>Solicitante:</strong> ${solicitante}</li>
+                    <li><strong>Oficina:</strong> ${oficina}</li>
+                    <li><strong>Fecha Registro:</strong> ${fecha}</li>
+                </ul>
+            </div>
+            
+            <p>Por favor, ingresa al panel de administración para revisar, aprobar o rechazar esta solicitud.</p>
+            
+            <div class="btn-container">
+                <a href="${gestionUrl}" class="btn" style="color: #ffffff !important;">Ir al Panel de Revisión</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>© 2026 GEA - Gestión de Eventos y Actividades</p>
+            <p>Este es un correo generado automáticamente. Por favor no responder.</p>
+        </div>
+    </div>
+</body>
+</html>

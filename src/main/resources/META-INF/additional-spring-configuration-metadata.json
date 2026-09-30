@@ -1,0 +1,74 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Clave secreta usada para firmar los JWT del backend."
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "Tiempo de expiracion del JWT en milisegundos."
+    },
+    {
+      "name": "microsoft.tenant-id",
+      "type": "java.lang.String",
+      "description": "Tenant de Microsoft Entra ID usado para validar login movil."
+    },
+    {
+      "name": "microsoft.client-id",
+      "type": "java.lang.String",
+      "description": "Client ID de la aplicacion registrada en Microsoft."
+    },
+    {
+      "name": "app.notifications.email-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Activa o desactiva el envio real de correos."
+    },
+    {
+      "name": "app.notifications.university-recipients",
+      "type": "java.lang.String",
+      "description": "Lista separada por comas de destinatarios institucionales fijos."
+    },
+    {
+      "name": "app.mail.from-name",
+      "type": "java.lang.String",
+      "description": "Nombre visible del remitente para correos salientes."
+    },
+    {
+      "name": "app.public-base-url",
+      "type": "java.lang.String",
+      "description": "URL base publica usada para construir enlaces en correos."
+    },
+    {
+      "name": "file.upload-dir",
+      "type": "java.lang.String",
+      "description": "Directorio local donde se almacenan archivos subidos."
+    },
+    {
+      "name": "file.allowed-extensions",
+      "type": "java.lang.String",
+      "description": "Extensiones permitidas separadas por comas."
+    },
+    {
+      "name": "file.allowed-content-types",
+      "type": "java.lang.String",
+      "description": "Content types permitidos separados por comas."
+    },
+    {
+      "name": "file.max-size-bytes",
+      "type": "java.lang.Long",
+      "description": "Tamano maximo permitido por archivo en bytes."
+    },
+    {
+      "name": "app.notifications.published-recipients",
+      "type": "java.lang.String",
+      "description": "Lista de destinatarios separados por comas para anuncios publicados."
+    },
+    {
+      "name": "app.frontend-base-url",
+      "type": "java.lang.String",
+      "description": "URL base del frontend web."
+    }
+  ]
+}

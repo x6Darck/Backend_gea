@@ -1,0 +1,63 @@
+# Unit de systemd para correr el backend SIN Docker, directo como proceso Java.
+# Instalación (ver deploy/native/README.md para la guía completa):
+#   sudo cp deploy/native/gea-backend.service /etc/systemd/system/gea-backend.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now gea-backend
+
+[Unit]
+Description=GEA Backend (Spring Boot)
+# Sin "Requires=mysql.service" a propósito: esa unidad no siempre existe con
+# ese nombre exacto (puede ser "mariadb.service", o — como en un servidor con
+# XAMPP — la base de datos ni siquiera está gestionada por systemd, sino por
+# el propio script /opt/lampp/lampp). "Requires" en una unidad que no existe
+# hace que systemd aborte el arranque de este servicio directamente ("A
+# dependency job for gea-backend.service failed"), confirmado con una
+# corrida real. Alcanza con "After=network.target" + el "Restart=on-failure"
+# de más abajo: si la base de datos aún no está lista al arrancar, el
+# backend reintenta solo cada 5s hasta conectar.
+After=network.target
+
+[Service]
+Type=simple
+User=gea
+Group=gea
+WorkingDirectory=/opt/gea/backend
+
+# KEY=VALOR, mismo formato que un .env — ver backend.env.example en esta carpeta.
+EnvironmentFile=/etc/gea/backend.env
+
+# "sh -c" para que $JAVA_OPTS (definido en el EnvironmentFile) se expanda antes
+# de ejecutar java — igual que el ENTRYPOINT del Dockerfile.
+ExecStart=/bin/sh -c 'exec java $JAVA_OPTS -jar /opt/gea/backend/app.jar'
+
+# Límite de memoria del proceso a nivel de cgroup — equivalente nativo del
+# "mem_limit" de docker-compose. Debe quedar por encima del -Xmx de JAVA_OPTS
+# (deja margen para metaspace/hilos/off-heap) y coherente con la RAM real del
+# servidor y lo que se le reserva a MySQL (ver tabla de tuning del plan de
+# migración). Ajustar junto con JAVA_OPTS si cambia la RAM del servidor.
+MemoryMax=3G
+
+Restart=on-failure
+RestartSec=5
+
+# Logs van al journal de systemd (equivalente a los logs de "docker logs").
+# Consultar con: journalctl -u gea-backend -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gea-backend
+
+# Hardening básico: el proceso no necesita escribir fuera de su propio
+# directorio de trabajo salvo la carpeta de uploads y su propio /tmp.
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/gea/backend/uploads
+# El Tomcat embebido de Spring Boot necesita crear un directorio temporal en
+# java.io.tmpdir (por defecto /tmp) al arrancar. Con ProtectSystem=strict el
+# /tmp real queda de solo lectura para este servicio y el arranque falla con
+# "Unable to create tempDir... Read-only file system". PrivateTmp=true le da
+# al proceso su propio /tmp aislado y escribible, sin aflojar el resto del
+# hardening (confirmado con una corrida real: sin esto el servicio no arranca).
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud Rechazada - GEA</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f7f9; }
+        .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { background: #ef4444; color: white; padding: 20px; text-align: center; }
+        .content { padding: 30px; }
+        .footer { background: #f9fafb; color: #6b7280; padding: 20px; text-align: center; font-size: 0.875rem; border-top: 1px solid #e5e7eb; }
+        .details { background: #fff1f2; border-left: 4px solid #ef4444; padding: 15px; margin: 20px 0; }
+        .button { display: inline-block; padding: 12px 24px; background-color: #ef4444; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; }
+        .motivo { font-style: italic; color: #b91c1c; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="color: #ffffff !important;">Estado de Solicitud</h1>
+        </div>
+        <div class="content">
+            <p>Hola,</p>
+            <p>Lamentamos informarte que tu solicitud para el elemento <strong>${titulo}</strong> ha sido <strong>RECHAZADA</strong> por el equipo de revisión.</p>
+            
+            <div class="details">
+                <p><strong>Motivo del rechazo:</strong></p>
+                <p class="motivo">${motivo}</p>
+            </div>
+
+            <p>Puedes revisar los detalles de tu solicitud y realizar los ajustes necesarios para enviarla nuevamente a revisión desde el panel administrativo.</p>
+            
+            <a href="${gestionUrl}" class="button" style="color: #ffffff !important;">Ir a mis solicitudes</a>
+        </div>
+        <div class="footer">
+            <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+            <p>&copy; 2026 GEA - Gestión de Eventos y Actividades</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Local Build Tools ###
+.mvn/repository/
+.tools/
+
+### MAIN ###
+.jdk/
+
+### Security and Logs ###
+.env
+.env.*
+!.env.example
+# Archivos de secretos reales preparados localmente para pasar a un servidor
+# por canal privado (nunca por git) — ver .env.example para el nombre real
+# que espera cada método de despliegue.
+backend.env.real
+*.env.real
+*.log
+*.class
+*.jar
+*.war
+.DS_Store
+uploads/
+deploy/certs/
