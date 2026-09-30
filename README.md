@@ -184,8 +184,8 @@ Para el despliegue mediante contenedores:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
-cd GEA_BACKEND
+git clone <https://github.com/x6Darck/Backend_gea.git>
+cd Backend_gea
 ```
 
 ### 2. Configurar las variables de entorno
@@ -375,7 +375,7 @@ Plataforma web desarrollada en **React** para la administración institucional d
 Repositorio:
 
 ```text
-https://github.com/x6Darck/GEA_FRONT
+https://github.com/x6Darck/Front_gea
 ```
 
 ---
@@ -399,7 +399,7 @@ La aplicación utiliza **Clean Architecture**, Riverpod para la gestión de esta
 Repositorio:
 
 ```text
-https://github.com/x6Darck/GEA_MOVIL
+https://github.com/x6Darck/Movil_gea
 ```
 
 ---
